@@ -54,6 +54,14 @@ Rails.application.configure do
   config.active_job.verbose_enqueue_logs = true
   config.active_job.queue_adapter = :solid_queue
 
+  if Rails.env.development?
+    config.after_initialize do
+      # Start Vite server
+      pid = spawn("bin/vite dev", out: "/dev/null", err: "/dev/null")
+      Process.detach(pid)
+    end
+  end
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

@@ -26,3 +26,13 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 
 // Example: Import a stylesheet in app/frontend/index.css
 // import '~/index.css'
+import React from "react";
+import ReactDOM from "react-dom/client"; // Import from "react-dom/client"
+import UploadForm from "../components/UploadForm";
+
+const rootElement = document.getElementById("root");
+
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement); // Use createRoot
+  root.render(<UploadForm />);
+}

@@ -49,4 +49,5 @@ end
 # Gemfile
 gem "vite_rails"
 gem "active_storage_validations"
+gem "foreman"
 
