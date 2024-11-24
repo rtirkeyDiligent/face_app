@@ -1,26 +1,25 @@
-version: "3.8"
 services:
   web:
     build: .
-    command: bin/rails server -b 0.0.0.0 -p 3000
+    command: sh -c "bin/rails db:migrate && bin/rails server -b 0.0.0.0 -p 3000"
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgres://postgres:password@db:5432/postgres
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
       - NODE_ENV=development
     volumes:
-      - ".:/app"
+      - ".:/app" # Syncs your local files with the container
     depends_on:
       - db
       - vite
 
   vite:
     build: .
-    command: bin/vite dev
+    command: sh -c "yarn install && bin/vite dev"
     ports:
       - "3036:3036"
     volumes:
-      - ".:/app"
+      - ".:/app" # Syncs your local files with the container
     environment:
       - NODE_ENV=development
 
@@ -29,5 +28,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

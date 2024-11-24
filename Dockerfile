@@ -3,21 +3,25 @@ FROM ruby:3.3
 
 # Install Node.js and Yarn
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get update && apt-get install -y nodejs && \
+    apt-get install -y nodejs && \
     npm install --global yarn
 
 # Set working directory
 WORKDIR /app
 
-# Install Ruby and Node.js dependencies
+# Copy Gemfile and install Ruby dependencies
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
+# Copy package.json and install Node.js dependencies
 COPY package.json yarn.lock ./
 RUN yarn install
 
-# Copy the rest of the application code
+# Copy all project files
 COPY . .
 
 # Expose ports
 EXPOSE 3000 3036
+
+# Run a custom entrypoint script for migrations and server start
+ENTRYPOINT ["sh", "/app/docker-entrypoint.sh"]
